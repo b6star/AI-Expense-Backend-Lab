@@ -1,6 +1,7 @@
 package com.codewithfk.expensetracker.android.utils
 
 import com.codewithfk.expensetracker.android.R
+import com.codewithfk.expensetracker.android.ai.gateway.AiModelCatalog
 import com.codewithfk.expensetracker.android.data.model.ExpenseEntity
 import java.text.NumberFormat
 import java.text.ParseException
@@ -156,15 +157,23 @@ object Utils {
 
     fun getOsVersion(): String = "Android ${android.os.Build.VERSION.RELEASE} (API ${android.os.Build.VERSION.SDK_INT})"
 
-    fun calculateCostUsd(promptTokens: Int, candidatesTokens: Int): Double {
-        // gemini-2.5-flash standard pricing:
-        // Input: $0.075 / 1M tokens ($0.000000075 / token)
-        // Output: $0.30 / 1M tokens ($0.00000030 / token)
-        return (promptTokens * 0.000000075) + (candidatesTokens * 0.00000030)
+
+    fun calculateCostUsd(
+        modelName: String,
+        promptTokens: Int,
+        candidatesTokens: Int,
+        thoughtsTokens: Int = 0
+    ): Double {
+        return AiModelCatalog.calculateCostUsd(
+            modelName = modelName,
+            promptTokens = promptTokens,
+            candidatesTokens = candidatesTokens,
+            thoughtsTokens = thoughtsTokens
+        )
     }
 
-    fun calculateCostKrw(costUsd: Double, exchangeRate: Double = 1350.0): Double {
-        return costUsd * exchangeRate
+    suspend fun calculateCostKrw(costUsd: Double): Double {
+        return costUsd * ExchangeRate.getUsdKrw()
     }
 
     fun formatCost(costKrw: Double): String {
@@ -182,4 +191,28 @@ object Utils {
         "대출 상환", "선물/기부", "여행", "기타 지출"
     )
 
+    /**
+     * AI 답변 중 Mermaid 코드 블록을 감지하여 mermaid.ink 이미지 URL로 변환합니다.
+     */
+    fun processMermaidDiagrams(content: String): String {
+        val mermaidRegex = """```mermaid\s*([\s\S]*?)\s*```""".toRegex()
+        return mermaidRegex.replace(content) { matchResult ->
+            val diagramCode = matchResult.groupValues[1].trim()
+            val encodedCode = try {
+                // Mermaid.ink expects standard Base64 encoding (not URL safe)
+                android.util.Base64.encodeToString(
+                    diagramCode.toByteArray(Charsets.UTF_8),
+                    android.util.Base64.DEFAULT or android.util.Base64.NO_WRAP
+                )
+            } catch (e: Exception) {
+                ""
+            }
+            if (encodedCode.isNotEmpty()) {
+                // Using .svg endpoint for better compatibility with SvgDecoder
+                "\n![Mermaid Diagram](https://mermaid.ink/svg/$encodedCode)\n"
+            } else {
+                matchResult.value
+            }
+        }
+    }
 }
