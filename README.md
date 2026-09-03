@@ -4,7 +4,7 @@
 
 AI와 대화하며 지출을 기록하고, 내 소비를 이해할 수 있는 Android 가계부 앱입니다.
 
-Smart Spend AI는 단순히 거래 내역을 저장하는 가계부에서 출발해, 사용자의 자연어 입력을 실제 가계부 데이터로 연결하는 AI 파이프라인을 구축하는 것을 목표로 합니다. 사용자는 직접 입력하거나 챗봇에게 질문할 수 있고, AI는 저장된 수입·지출 내역을 바탕으로 조회, 분석, 기록 관리, 절약 인사이트를 제공합니다.
+Smart Spend AI는 거래 내역을 저장하는 가계부에서 출발해, 사용자의 자연어 입력을 실제 가계부 데이터로 연결하는 AI 파이프라인을 구축하는 것을 목표로 합니다. 사용자는 직접 입력하거나 챗봇에게 질문할 수 있고, AI는 저장된 수입·지출 내역을 바탕으로 조회, 분석, 기록 관리, 절약 인사이트를 제공합니다.
 
 ## 주요 기능
 
@@ -126,46 +126,6 @@ Android App
 
 기본적으로 거래 데이터는 앱의 Room Database에서 관리됩니다. 로그인한 사용자의 채팅 및 AI 분석 이력은 Firebase와 동기화할 수 있으며, 분석 결과에는 사용 모델, 응답 시간, 토큰 사용량 등의 실행 메타데이터도 함께 기록됩니다.
 
-## 시작하기
-
-### 요구 사항
-
-- Android Studio 최신 안정 버전 권장
-- JDK 8 이상
-- Android SDK 34
-- Android 7.0(API 24) 이상
-- Firebase 프로젝트
-
-### Firebase 설정
-
-1. Firebase Console에서 Android 앱을 생성합니다.
-2. 패키지 이름을 com.smartspend.ai로 등록합니다.
-3. Google 로그인, Authentication, Firestore, Storage, App Check를 필요한 환경에 맞게 활성화합니다.
-4. Firebase AI Logic을 사용할 수 있도록 프로젝트를 설정합니다.
-5. Firebase Console에서 받은 google-services.json을 app/ 디렉터리에 둡니다.
-
-google-services.json은 개인 프로젝트 설정과 인증 정보가 포함될 수 있으므로 공개 저장소에 올릴 때는 포함 여부를 확인하세요.
-
-### 빌드 및 실행
-
-~~~bash
-git clone https://github.com/b6star/Smart-Spend-AI.git
-cd Smart-Spend-AI
-~~~
-
-Android Studio에서 프로젝트를 연 후 Gradle Sync를 실행하고 에뮬레이터 또는 실제 Android 기기에서 app을 실행합니다.
-
-명령줄 빌드는 다음과 같이 실행할 수 있습니다.
-
-~~~bash
-./gradlew assembleDebug
-~~~
-
-Windows에서는 다음을 사용합니다.
-
-~~~powershell
-.\gradlew.bat assembleDebug
-~~~
 
 ## 스크린샷
 
@@ -173,7 +133,7 @@ Windows에서는 다음을 사용합니다.
 |----------------------------------------------------| ------------------------------------------------- |-------------------------------------------------|
 | ![AI 분석](screenshots/screenshot_data_analysis.jpg) | ![지출 추가](screenshots/screenshot_auto_input.gif) | ![AI 챗봇](screenshots/screenshot_ai_chat_bot.gif) |
 
-## 프로젝트 상태
+## 프로젝트 요약
 
 가계부의 기본 기능과 Firebase 기반 AI 챗봇·소비 분석 파이프라인을 구현한 프로젝트입니다. 수입·지출 관리, 자연어 기반 거래 입력 및 조회, 소비 분석, AI 챗봇 기능을 제공합니다.
 
